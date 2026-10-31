@@ -180,7 +180,8 @@ export interface RemoteService {
     }): Promise<RemoteResult<{ accepted: true }>>
     modelCatalog(): Promise<RemoteResult<{ groups: readonly ModelProviderGroup[] }>>
   }
-  agentPresets?: {
+  /** Injected as the `remote.agentPresets` service (see index.ts inject). */
+  agentPresets: {
     list(): Promise<RemoteResult<{ presets: readonly AgentPresetEntry[] }>>
   }
 }

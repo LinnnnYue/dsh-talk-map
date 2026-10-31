@@ -22,12 +22,22 @@ export const name = 'dsh-talk-map'
  * parent alone is not enough: reading an un-injected namespace throws
  * `cannot get property "remote.session" without inject`, and a throw inside a
  * slot component's effect takes the whole overlay down with it.
- * `remote.agentPresets` is deliberately NOT listed — that namespace is mounted
- * only when the deployment composes the preset registry's client half, and
- * injecting a name that never resolves would leave this plugin permanently
- * unapplied. The preset lookup is guarded in DraftCard instead.
+ *
+ * Both namespaces the map reads are listed, mirroring the native convention
+ * (`dsh-client-ui-workspace` injects `remote` and `remote.directoryPicker`
+ * side by side). Neither name is in the boot manifest: that field lists
+ * PACKAGE ids, while the namespace services are mounted from the generated
+ * remote contract compiled into `dsh-api-remotes`' client half.
  */
-export const inject = ['slots', 'sessions', 'workspaces', 'remote', 'remote.session', 'uiWorkspace']
+export const inject = [
+  'slots',
+  'sessions',
+  'workspaces',
+  'remote',
+  'remote.session',
+  'remote.agentPresets',
+  'uiWorkspace',
+]
 
 let applied = false
 

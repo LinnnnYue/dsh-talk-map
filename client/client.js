@@ -11540,86 +11540,86 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 			document.head.appendChild(tag);
 		}
 		var talk_map_module_css_default = {
-			"colorToolbar": "fm7s2a_colorToolbar",
-			"draftHeading": "fm7s2a_draftHeading",
-			"headerTitle": "fm7s2a_headerTitle",
-			"cardBadgeDone": "fm7s2a_cardBadgeDone",
-			"canvasConnecting": "fm7s2a_canvasConnecting",
-			"spawnPanel": "fm7s2a_spawnPanel",
-			"toggleButton": "fm7s2a_toggleButton",
-			"spawnHeading": "fm7s2a_spawnHeading",
-			"spawnTextarea": "fm7s2a_spawnTextarea",
-			"draftTextarea": "fm7s2a_draftTextarea",
-			"header": "fm7s2a_header",
 			"cardTime": "fm7s2a_cardTime",
-			"cardSummary": "fm7s2a_cardSummary",
-			"menu": "fm7s2a_menu",
-			"wsFrameSelected": "fm7s2a_wsFrameSelected",
-			"langButton": "fm7s2a_langButton",
-			"cardTitle": "fm7s2a_cardTitle",
-			"cardNext": "fm7s2a_cardNext",
-			"headerSpace": "fm7s2a_headerSpace",
-			"cardBadgeWaiting": "fm7s2a_cardBadgeWaiting",
-			"runningDot": "fm7s2a_runningDot",
 			"emptyHint": "fm7s2a_emptyHint",
-			"canvas": "fm7s2a_canvas",
-			"closeButton": "fm7s2a_closeButton",
-			"talkmap-pulse": "fm7s2a_talkmap-pulse",
-			"toggleButtonActive": "fm7s2a_toggleButtonActive",
-			"cardNextText": "fm7s2a_cardNextText",
-			"colorToolbarLabel": "fm7s2a_colorToolbarLabel",
-			"headerBadge": "fm7s2a_headerBadge",
-			"menuSearch": "fm7s2a_menuSearch",
-			"wsFrameLabel": "fm7s2a_wsFrameLabel",
-			"menuTitle": "fm7s2a_menuTitle",
-			"menuPreview": "fm7s2a_menuPreview",
-			"draftLabel": "fm7s2a_draftLabel",
-			"hotkeyButton": "fm7s2a_hotkeyButton",
-			"wsFrame": "fm7s2a_wsFrame",
-			"spawnHint": "fm7s2a_spawnHint",
-			"draftCard": "fm7s2a_draftCard",
-			"colorSwatch": "fm7s2a_colorSwatch",
-			"wsFrameEdge": "fm7s2a_wsFrameEdge",
-			"menuError": "fm7s2a_menuError",
-			"spawnModes": "fm7s2a_spawnModes",
-			"cardRefreshBusy": "fm7s2a_cardRefreshBusy",
-			"card": "fm7s2a_card",
-			"draftGrow": "fm7s2a_draftGrow",
-			"wsFrameHidden": "fm7s2a_wsFrameHidden",
-			"spawnFrom": "fm7s2a_spawnFrom",
-			"talkmap-spin": "fm7s2a_talkmap-spin",
-			"cardFooter": "fm7s2a_cardFooter",
-			"menuItem": "fm7s2a_menuItem",
-			"cardBadgeRunning": "fm7s2a_cardBadgeRunning",
-			"cardGhost": "fm7s2a_cardGhost",
-			"zoomResetLabel": "fm7s2a_zoomResetLabel",
-			"toggleRow": "fm7s2a_toggleRow",
-			"spawnBtnPrimary": "fm7s2a_spawnBtnPrimary",
-			"draftSelect": "fm7s2a_draftSelect",
-			"cardRefresh": "fm7s2a_cardRefresh",
-			"cardTop": "fm7s2a_cardTop",
-			"draftInput": "fm7s2a_draftInput",
-			"toast": "fm7s2a_toast",
-			"wsFrameResize": "fm7s2a_wsFrameResize",
-			"wsFrameCount": "fm7s2a_wsFrameCount",
-			"menuEmpty": "fm7s2a_menuEmpty",
-			"toggleLabel": "fm7s2a_toggleLabel",
-			"cardRemove": "fm7s2a_cardRemove",
-			"cardHandle": "fm7s2a_cardHandle",
-			"toggleIcon": "fm7s2a_toggleIcon",
-			"menuHint": "fm7s2a_menuHint",
-			"spawnModeActive": "fm7s2a_spawnModeActive",
-			"cardStale": "fm7s2a_cardStale",
-			"draftPathPreview": "fm7s2a_draftPathPreview",
-			"draftRow": "fm7s2a_draftRow",
-			"spawnBtnGhost": "fm7s2a_spawnBtnGhost",
-			"spawnActions": "fm7s2a_spawnActions",
-			"overlay": "fm7s2a_overlay",
-			"cardSelected": "fm7s2a_cardSelected",
-			"colorSwatchClear": "fm7s2a_colorSwatchClear",
 			"cardNextLabel": "fm7s2a_cardNextLabel",
+			"cardBadgeDone": "fm7s2a_cardBadgeDone",
+			"menu": "fm7s2a_menu",
+			"toggleButton": "fm7s2a_toggleButton",
+			"cardTitle": "fm7s2a_cardTitle",
+			"cardBadgeWaiting": "fm7s2a_cardBadgeWaiting",
+			"overlay": "fm7s2a_overlay",
+			"wsFrameSelected": "fm7s2a_wsFrameSelected",
+			"cardNext": "fm7s2a_cardNext",
+			"hotkeyButton": "fm7s2a_hotkeyButton",
+			"talkmap-pulse": "fm7s2a_talkmap-pulse",
+			"cardNextText": "fm7s2a_cardNextText",
+			"canvasConnecting": "fm7s2a_canvasConnecting",
+			"cardRefreshBusy": "fm7s2a_cardRefreshBusy",
+			"wsFrameCount": "fm7s2a_wsFrameCount",
+			"wsFrameEdge": "fm7s2a_wsFrameEdge",
 			"spawnError": "fm7s2a_spawnError",
-			"spawnModeBtn": "fm7s2a_spawnModeBtn"
+			"draftPathPreview": "fm7s2a_draftPathPreview",
+			"draftHeading": "fm7s2a_draftHeading",
+			"colorSwatch": "fm7s2a_colorSwatch",
+			"zoomResetLabel": "fm7s2a_zoomResetLabel",
+			"wsFrameLabel": "fm7s2a_wsFrameLabel",
+			"langButton": "fm7s2a_langButton",
+			"toggleLabel": "fm7s2a_toggleLabel",
+			"menuError": "fm7s2a_menuError",
+			"canvas": "fm7s2a_canvas",
+			"colorToolbarLabel": "fm7s2a_colorToolbarLabel",
+			"wsFrameHidden": "fm7s2a_wsFrameHidden",
+			"spawnModeActive": "fm7s2a_spawnModeActive",
+			"menuItem": "fm7s2a_menuItem",
+			"spawnPanel": "fm7s2a_spawnPanel",
+			"headerTitle": "fm7s2a_headerTitle",
+			"card": "fm7s2a_card",
+			"cardBadgeRunning": "fm7s2a_cardBadgeRunning",
+			"spawnBtnPrimary": "fm7s2a_spawnBtnPrimary",
+			"spawnHeading": "fm7s2a_spawnHeading",
+			"draftCard": "fm7s2a_draftCard",
+			"spawnTextarea": "fm7s2a_spawnTextarea",
+			"cardHandle": "fm7s2a_cardHandle",
+			"closeButton": "fm7s2a_closeButton",
+			"cardGhost": "fm7s2a_cardGhost",
+			"draftSelect": "fm7s2a_draftSelect",
+			"toggleRow": "fm7s2a_toggleRow",
+			"spawnActions": "fm7s2a_spawnActions",
+			"draftGrow": "fm7s2a_draftGrow",
+			"toast": "fm7s2a_toast",
+			"cardSummary": "fm7s2a_cardSummary",
+			"headerBadge": "fm7s2a_headerBadge",
+			"runningDot": "fm7s2a_runningDot",
+			"cardRemove": "fm7s2a_cardRemove",
+			"menuPreview": "fm7s2a_menuPreview",
+			"menuSearch": "fm7s2a_menuSearch",
+			"spawnFrom": "fm7s2a_spawnFrom",
+			"headerSpace": "fm7s2a_headerSpace",
+			"toggleButtonActive": "fm7s2a_toggleButtonActive",
+			"header": "fm7s2a_header",
+			"draftTextarea": "fm7s2a_draftTextarea",
+			"cardSelected": "fm7s2a_cardSelected",
+			"cardFooter": "fm7s2a_cardFooter",
+			"spawnModeBtn": "fm7s2a_spawnModeBtn",
+			"spawnBtnGhost": "fm7s2a_spawnBtnGhost",
+			"cardTop": "fm7s2a_cardTop",
+			"cardStale": "fm7s2a_cardStale",
+			"spawnModes": "fm7s2a_spawnModes",
+			"spawnHint": "fm7s2a_spawnHint",
+			"draftRow": "fm7s2a_draftRow",
+			"draftLabel": "fm7s2a_draftLabel",
+			"draftInput": "fm7s2a_draftInput",
+			"colorToolbar": "fm7s2a_colorToolbar",
+			"menuTitle": "fm7s2a_menuTitle",
+			"toggleIcon": "fm7s2a_toggleIcon",
+			"talkmap-spin": "fm7s2a_talkmap-spin",
+			"wsFrame": "fm7s2a_wsFrame",
+			"menuHint": "fm7s2a_menuHint",
+			"cardRefresh": "fm7s2a_cardRefresh",
+			"colorSwatchClear": "fm7s2a_colorSwatchClear",
+			"wsFrameResize": "fm7s2a_wsFrameResize",
+			"menuEmpty": "fm7s2a_menuEmpty"
 		};
 		//#endregion
 		//#region src/client/ContextMenu.tsx
@@ -11813,15 +11813,13 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 				services.remote.session.modelCatalog().then((result) => {
 					if (result.ok) setGroups([...result.value.groups ?? []]);
 				}).catch(() => void 0);
-				try {
-					services.remote.agentPresets?.list().then((result) => {
-						if (result.ok) {
-							const list = result.value.presets;
-							setPresets(list);
-							if (list.some((preset) => preset.id === "standard")) setPresetId((previous) => previous === "" ? "standard" : previous);
-						}
-					}).catch(() => void 0);
-				} catch {}
+				services.remote.agentPresets.list().then((result) => {
+					if (result.ok) {
+						const list = result.value.presets;
+						setPresets(list);
+						if (list.some((preset) => preset.id === "standard")) setPresetId((previous) => previous === "" ? "standard" : previous);
+					}
+				}).catch(() => void 0);
 				talkMapApi.getDefaults().then((defaults) => {
 					if (defaults.model !== null) setDefaultModelLabel(defaults.model.model);
 					if (defaults.preset !== null) setDefaultPresetLabel(defaults.preset);
@@ -13797,10 +13795,12 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 		* parent alone is not enough: reading an un-injected namespace throws
 		* `cannot get property "remote.session" without inject`, and a throw inside a
 		* slot component's effect takes the whole overlay down with it.
-		* `remote.agentPresets` is deliberately NOT listed — that namespace is mounted
-		* only when the deployment composes the preset registry's client half, and
-		* injecting a name that never resolves would leave this plugin permanently
-		* unapplied. The preset lookup is guarded in DraftCard instead.
+		*
+		* Both namespaces the map reads are listed, mirroring the native convention
+		* (`dsh-client-ui-workspace` injects `remote` and `remote.directoryPicker`
+		* side by side). Neither name is in the boot manifest: that field lists
+		* PACKAGE ids, while the namespace services are mounted from the generated
+		* remote contract compiled into `dsh-api-remotes`' client half.
 		*/
 		const inject = [
 			"slots",
@@ -13808,6 +13808,7 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 			"workspaces",
 			"remote",
 			"remote.session",
+			"remote.agentPresets",
 			"uiWorkspace"
 		];
 		let applied = false;
