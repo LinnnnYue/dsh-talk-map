@@ -11540,86 +11540,86 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 			document.head.appendChild(tag);
 		}
 		var talk_map_module_css_default = {
-			"colorSwatch": "fm7s2a_colorSwatch",
+			"colorToolbar": "fm7s2a_colorToolbar",
 			"draftHeading": "fm7s2a_draftHeading",
-			"draftCard": "fm7s2a_draftCard",
-			"spawnBtnGhost": "fm7s2a_spawnBtnGhost",
-			"draftRow": "fm7s2a_draftRow",
-			"spawnActions": "fm7s2a_spawnActions",
-			"closeButton": "fm7s2a_closeButton",
-			"spawnBtnPrimary": "fm7s2a_spawnBtnPrimary",
+			"headerTitle": "fm7s2a_headerTitle",
+			"cardBadgeDone": "fm7s2a_cardBadgeDone",
+			"canvasConnecting": "fm7s2a_canvasConnecting",
+			"spawnPanel": "fm7s2a_spawnPanel",
+			"toggleButton": "fm7s2a_toggleButton",
+			"spawnHeading": "fm7s2a_spawnHeading",
 			"spawnTextarea": "fm7s2a_spawnTextarea",
+			"draftTextarea": "fm7s2a_draftTextarea",
+			"header": "fm7s2a_header",
+			"cardTime": "fm7s2a_cardTime",
+			"cardSummary": "fm7s2a_cardSummary",
+			"menu": "fm7s2a_menu",
+			"wsFrameSelected": "fm7s2a_wsFrameSelected",
+			"langButton": "fm7s2a_langButton",
+			"cardTitle": "fm7s2a_cardTitle",
+			"cardNext": "fm7s2a_cardNext",
+			"headerSpace": "fm7s2a_headerSpace",
+			"cardBadgeWaiting": "fm7s2a_cardBadgeWaiting",
+			"runningDot": "fm7s2a_runningDot",
+			"emptyHint": "fm7s2a_emptyHint",
+			"canvas": "fm7s2a_canvas",
+			"closeButton": "fm7s2a_closeButton",
+			"talkmap-pulse": "fm7s2a_talkmap-pulse",
+			"toggleButtonActive": "fm7s2a_toggleButtonActive",
+			"cardNextText": "fm7s2a_cardNextText",
 			"colorToolbarLabel": "fm7s2a_colorToolbarLabel",
+			"headerBadge": "fm7s2a_headerBadge",
+			"menuSearch": "fm7s2a_menuSearch",
+			"wsFrameLabel": "fm7s2a_wsFrameLabel",
+			"menuTitle": "fm7s2a_menuTitle",
+			"menuPreview": "fm7s2a_menuPreview",
+			"draftLabel": "fm7s2a_draftLabel",
+			"hotkeyButton": "fm7s2a_hotkeyButton",
+			"wsFrame": "fm7s2a_wsFrame",
+			"spawnHint": "fm7s2a_spawnHint",
+			"draftCard": "fm7s2a_draftCard",
+			"colorSwatch": "fm7s2a_colorSwatch",
+			"wsFrameEdge": "fm7s2a_wsFrameEdge",
+			"menuError": "fm7s2a_menuError",
+			"spawnModes": "fm7s2a_spawnModes",
 			"cardRefreshBusy": "fm7s2a_cardRefreshBusy",
+			"card": "fm7s2a_card",
+			"draftGrow": "fm7s2a_draftGrow",
+			"wsFrameHidden": "fm7s2a_wsFrameHidden",
+			"spawnFrom": "fm7s2a_spawnFrom",
+			"talkmap-spin": "fm7s2a_talkmap-spin",
+			"cardFooter": "fm7s2a_cardFooter",
+			"menuItem": "fm7s2a_menuItem",
+			"cardBadgeRunning": "fm7s2a_cardBadgeRunning",
+			"cardGhost": "fm7s2a_cardGhost",
+			"zoomResetLabel": "fm7s2a_zoomResetLabel",
+			"toggleRow": "fm7s2a_toggleRow",
+			"spawnBtnPrimary": "fm7s2a_spawnBtnPrimary",
+			"draftSelect": "fm7s2a_draftSelect",
+			"cardRefresh": "fm7s2a_cardRefresh",
+			"cardTop": "fm7s2a_cardTop",
+			"draftInput": "fm7s2a_draftInput",
+			"toast": "fm7s2a_toast",
 			"wsFrameResize": "fm7s2a_wsFrameResize",
+			"wsFrameCount": "fm7s2a_wsFrameCount",
 			"menuEmpty": "fm7s2a_menuEmpty",
 			"toggleLabel": "fm7s2a_toggleLabel",
-			"cardRefresh": "fm7s2a_cardRefresh",
-			"talkmap-pulse": "fm7s2a_talkmap-pulse",
-			"spawnFrom": "fm7s2a_spawnFrom",
-			"menu": "fm7s2a_menu",
-			"wsFrameHidden": "fm7s2a_wsFrameHidden",
-			"cardBadgeWaiting": "fm7s2a_cardBadgeWaiting",
-			"cardTitle": "fm7s2a_cardTitle",
-			"wsFrameEdge": "fm7s2a_wsFrameEdge",
-			"headerBadge": "fm7s2a_headerBadge",
-			"cardBadgeDone": "fm7s2a_cardBadgeDone",
 			"cardRemove": "fm7s2a_cardRemove",
-			"headerSpace": "fm7s2a_headerSpace",
-			"spawnError": "fm7s2a_spawnError",
-			"cardTime": "fm7s2a_cardTime",
-			"header": "fm7s2a_header",
-			"menuTitle": "fm7s2a_menuTitle",
-			"wsFrameCount": "fm7s2a_wsFrameCount",
-			"cardFooter": "fm7s2a_cardFooter",
-			"card": "fm7s2a_card",
-			"wsFrameSelected": "fm7s2a_wsFrameSelected",
-			"zoomResetLabel": "fm7s2a_zoomResetLabel",
-			"draftSelect": "fm7s2a_draftSelect",
-			"draftPathPreview": "fm7s2a_draftPathPreview",
-			"canvasConnecting": "fm7s2a_canvasConnecting",
-			"cardNext": "fm7s2a_cardNext",
-			"hotkeyButton": "fm7s2a_hotkeyButton",
-			"spawnModeBtn": "fm7s2a_spawnModeBtn",
-			"cardSummary": "fm7s2a_cardSummary",
-			"cardSelected": "fm7s2a_cardSelected",
 			"cardHandle": "fm7s2a_cardHandle",
+			"toggleIcon": "fm7s2a_toggleIcon",
 			"menuHint": "fm7s2a_menuHint",
-			"talkmap-spin": "fm7s2a_talkmap-spin",
-			"cardNextLabel": "fm7s2a_cardNextLabel",
-			"colorSwatchClear": "fm7s2a_colorSwatchClear",
-			"canvas": "fm7s2a_canvas",
-			"menuItem": "fm7s2a_menuItem",
-			"cardStale": "fm7s2a_cardStale",
-			"toast": "fm7s2a_toast",
-			"spawnModes": "fm7s2a_spawnModes",
-			"spawnHint": "fm7s2a_spawnHint",
-			"menuSearch": "fm7s2a_menuSearch",
-			"cardGhost": "fm7s2a_cardGhost",
-			"menuPreview": "fm7s2a_menuPreview",
-			"headerTitle": "fm7s2a_headerTitle",
-			"emptyHint": "fm7s2a_emptyHint",
-			"spawnHeading": "fm7s2a_spawnHeading",
-			"draftGrow": "fm7s2a_draftGrow",
-			"draftInput": "fm7s2a_draftInput",
-			"menuError": "fm7s2a_menuError",
-			"toggleButton": "fm7s2a_toggleButton",
-			"cardTop": "fm7s2a_cardTop",
-			"wsFrameLabel": "fm7s2a_wsFrameLabel",
-			"runningDot": "fm7s2a_runningDot",
-			"langButton": "fm7s2a_langButton",
-			"wsFrame": "fm7s2a_wsFrame",
-			"spawnPanel": "fm7s2a_spawnPanel",
 			"spawnModeActive": "fm7s2a_spawnModeActive",
-			"draftLabel": "fm7s2a_draftLabel",
-			"cardNextText": "fm7s2a_cardNextText",
-			"colorToolbar": "fm7s2a_colorToolbar",
-			"cardBadgeRunning": "fm7s2a_cardBadgeRunning",
-			"toggleButtonActive": "fm7s2a_toggleButtonActive",
+			"cardStale": "fm7s2a_cardStale",
+			"draftPathPreview": "fm7s2a_draftPathPreview",
+			"draftRow": "fm7s2a_draftRow",
+			"spawnBtnGhost": "fm7s2a_spawnBtnGhost",
+			"spawnActions": "fm7s2a_spawnActions",
 			"overlay": "fm7s2a_overlay",
-			"draftTextarea": "fm7s2a_draftTextarea",
-			"toggleRow": "fm7s2a_toggleRow",
-			"toggleIcon": "fm7s2a_toggleIcon"
+			"cardSelected": "fm7s2a_cardSelected",
+			"colorSwatchClear": "fm7s2a_colorSwatchClear",
+			"cardNextLabel": "fm7s2a_cardNextLabel",
+			"spawnError": "fm7s2a_spawnError",
+			"spawnModeBtn": "fm7s2a_spawnModeBtn"
 		};
 		//#endregion
 		//#region src/client/ContextMenu.tsx
@@ -11813,13 +11813,15 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 				services.remote.session.modelCatalog().then((result) => {
 					if (result.ok) setGroups([...result.value.groups ?? []]);
 				}).catch(() => void 0);
-				services.remote.agentPresets.list().then((result) => {
-					if (result.ok) {
-						const list = result.value.presets;
-						setPresets(list);
-						if (list.some((preset) => preset.id === "standard")) setPresetId((previous) => previous === "" ? "standard" : previous);
-					}
-				}).catch(() => void 0);
+				try {
+					services.remote.agentPresets?.list().then((result) => {
+						if (result.ok) {
+							const list = result.value.presets;
+							setPresets(list);
+							if (list.some((preset) => preset.id === "standard")) setPresetId((previous) => previous === "" ? "standard" : previous);
+						}
+					}).catch(() => void 0);
+				} catch {}
 				talkMapApi.getDefaults().then((defaults) => {
 					if (defaults.model !== null) setDefaultModelLabel(defaults.model.model);
 					if (defaults.preset !== null) setDefaultPresetLabel(defaults.preset);
@@ -13789,11 +13791,23 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 		//#endregion
 		//#region src/client/index.ts
 		const name = "dsh-talk-map";
+		/**
+		* Cordis service keys. 0.2.1-rc.5 registers every `remote` namespace as its
+		* OWN service (`remote.session`, `remote.agentPresets`, …), so naming the
+		* parent alone is not enough: reading an un-injected namespace throws
+		* `cannot get property "remote.session" without inject`, and a throw inside a
+		* slot component's effect takes the whole overlay down with it.
+		* `remote.agentPresets` is deliberately NOT listed — that namespace is mounted
+		* only when the deployment composes the preset registry's client half, and
+		* injecting a name that never resolves would leave this plugin permanently
+		* unapplied. The preset lookup is guarded in DraftCard instead.
+		*/
 		const inject = [
 			"slots",
 			"sessions",
 			"workspaces",
 			"remote",
+			"remote.session",
 			"uiWorkspace"
 		];
 		let applied = false;

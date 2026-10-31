@@ -180,7 +180,7 @@ export interface RemoteService {
     }): Promise<RemoteResult<{ accepted: true }>>
     modelCatalog(): Promise<RemoteResult<{ groups: readonly ModelProviderGroup[] }>>
   }
-  agentPresets: {
+  agentPresets?: {
     list(): Promise<RemoteResult<{ presets: readonly AgentPresetEntry[] }>>
   }
 }

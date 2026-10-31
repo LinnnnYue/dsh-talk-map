@@ -16,7 +16,18 @@ import { MapToggleButton } from './MapToggleButton.tsx'
 import { t } from './i18n.ts'
 
 export const name = 'dsh-talk-map'
-export const inject = ['slots', 'sessions', 'workspaces', 'remote', 'uiWorkspace']
+/**
+ * Cordis service keys. 0.2.1-rc.5 registers every `remote` namespace as its
+ * OWN service (`remote.session`, `remote.agentPresets`, …), so naming the
+ * parent alone is not enough: reading an un-injected namespace throws
+ * `cannot get property "remote.session" without inject`, and a throw inside a
+ * slot component's effect takes the whole overlay down with it.
+ * `remote.agentPresets` is deliberately NOT listed — that namespace is mounted
+ * only when the deployment composes the preset registry's client half, and
+ * injecting a name that never resolves would leave this plugin permanently
+ * unapplied. The preset lookup is guarded in DraftCard instead.
+ */
+export const inject = ['slots', 'sessions', 'workspaces', 'remote', 'remote.session', 'uiWorkspace']
 
 let applied = false
 

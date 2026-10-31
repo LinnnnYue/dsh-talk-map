@@ -88,17 +88,24 @@ export function DraftCardNode(props: NodeProps<DraftCardNodeType>): React.JSX.El
     services.remote.session.modelCatalog().then((result) => {
       if (result.ok) setGroups([...(result.value.groups ?? [])])
     }).catch(() => undefined)
-    services.remote.agentPresets.list().then((result) => {
-      if (result.ok) {
-        const list = result.value.presets
-        setPresets(list)
-        // Prefer the plain "standard" preset for map-born conversations —
-        // the deployment default may be a specialized mode (e.g. cordis).
-        if (list.some(preset => preset.id === 'standard')) {
-          setPresetId(previous => (previous === '' ? 'standard' : previous))
+    // The `agentPresets` namespace only exists when the deployment composes
+    // the preset registry's client half. Touching an unmounted namespace
+    // throws under cordis's inject guard — a bare `.catch()` cannot see that,
+    // because the throw happens on property access, not in the returned
+    // promise. Hence the try/catch: the roster is optional, the map is not.
+    try {
+      services.remote.agentPresets?.list().then((result) => {
+        if (result.ok) {
+          const list = result.value.presets
+          setPresets(list)
+          // Prefer the plain "standard" preset for map-born conversations —
+          // the deployment default may be a specialized mode (e.g. cordis).
+          if (list.some(preset => preset.id === 'standard')) {
+            setPresetId(previous => (previous === '' ? 'standard' : previous))
+          }
         }
-      }
-    }).catch(() => undefined)
+      }).catch(() => undefined)
+    } catch { /* namespace not mounted in this client assembly */ }
     talkMapApi.getDefaults().then((defaults) => {
       if (defaults.model !== null) setDefaultModelLabel(defaults.model.model)
       if (defaults.preset !== null) setDefaultPresetLabel(defaults.preset)
