@@ -3,7 +3,7 @@
  * two components registered into unrelated slots, so they meet through this
  * module-level external store (useSyncExternalStore on the React side).
  */
-import type { ConnectionService, SessionsService, WorkspacesService } from './dsh.ts'
+import type { RemoteService, SessionsService, UiWorkspaceService, WorkspacesService } from './dsh.ts'
 
 export interface MapUiState {
   readonly open: boolean
@@ -56,7 +56,8 @@ export const mapUi = {
 export interface MapServices {
   sessions: SessionsService
   workspaces: WorkspacesService
-  connection: ConnectionService
+  remote: RemoteService
+  uiWorkspace: UiWorkspaceService
 }
 
 let services: MapServices | undefined

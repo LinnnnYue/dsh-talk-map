@@ -16,7 +16,7 @@ import { MapToggleButton } from './MapToggleButton.tsx'
 import { t } from './i18n.ts'
 
 export const name = 'dsh-talk-map'
-export const inject = ['slots', 'sessions', 'workspaces', 'connection']
+export const inject = ['slots', 'sessions', 'workspaces', 'remote', 'uiWorkspace']
 
 let applied = false
 
@@ -28,7 +28,12 @@ export function apply(ctx: TalkMapClientContext): void {
   ctx.effect(() => () => { applied = false }, 'dsh-talk-map: apply claim')
 
   try {
-    attachServices({ sessions: ctx.sessions, workspaces: ctx.workspaces, connection: ctx.connection })
+    attachServices({
+      sessions: ctx.sessions,
+      workspaces: ctx.workspaces,
+      remote: ctx.remote,
+      uiWorkspace: ctx.uiWorkspace,
+    })
     ctx.effect(() => () => { attachServices(undefined) }, 'dsh-talk-map: services')
 
     ctx.slots.inject('sidebar.footer.action', () => ctx.slots.register({

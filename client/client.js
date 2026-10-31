@@ -334,6 +334,32 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 			return template.replace(/\{(\w+)\}/g, (match, name) => params[name] ?? match);
 		}
 		//#endregion
+		//#region src/client/uuid.ts
+		/**
+		* Random v4 UUID minted from `crypto.getRandomValues`.
+		*
+		* `crypto.randomUUID` is a **secure-context** Web API: a page served over
+		* plain HTTP on a LAN address (the common dsh deployment: `dsh web --host
+		* <lan-ip>` with no TLS) has no such method, and calling it throws a
+		* TypeError. `getRandomValues` is available in every context the client half
+		* runs in (browser, worker, Node ≥ 19).
+		*
+		* This mirrors `@deepseek-ai/dsh-util-crypto`, which exists for exactly this
+		* reason — it is not imported here because this plugin keeps zero
+		* `@deepseek-ai/*` runtime imports (those packages have no installable
+		* directory in a dsh deployment; only their bundled client artifacts exist).
+		*/
+		/**
+		* @returns a canonical v4 UUID string.
+		*/
+		function randomUUID() {
+			const bytes = crypto.getRandomValues(/* @__PURE__ */ new Uint8Array(16));
+			bytes[6] = (bytes[6] ?? 0) & 15 | 64;
+			bytes[8] = (bytes[8] ?? 0) & 63 | 128;
+			const hex = Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
+			return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+		}
+		//#endregion
 		//#region src/shared/model.ts
 		const INBOX_BOARD_ID = "inbox";
 		//#endregion
@@ -734,7 +760,7 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 			}
 		};
 		function newCardId() {
-			return `card-${crypto.randomUUID()}`;
+			return `card-${randomUUID()}`;
 		}
 		function parseHotkey(value) {
 			const parts = value.split("+");
@@ -11504,7 +11530,7 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 		}
 		//#endregion
 		//#region \0dsh-css:module:src/client/talk-map.module.css.mjs
-		const css = "._0iu0NW_toggleButton{width:32px;height:32px;color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border:none;border-radius:8px;justify-content:center;align-items:center;gap:6px;padding:0;display:flex}._0iu0NW_toggleButton:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}._0iu0NW_toggleButtonActive{background:var(--dsw-alias-interactive-bg-active);color:var(--dsw-alias-brand-primary)}._0iu0NW_toggleRow{width:100%;color:var(--dsw-alias-label-secondary);cursor:pointer;text-align:left;background:0 0;border:none;border-radius:8px;align-items:center;gap:8px;padding:6px 10px;font-size:13px;display:flex}._0iu0NW_toggleRow:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}._0iu0NW_toggleLabel{white-space:nowrap}._0iu0NW_toggleIcon{flex:none;width:18px;height:18px}._0iu0NW_overlay{background:var(--dsw-alias-bg-base);color:var(--dsw-alias-label-primary);pointer-events:auto;flex-direction:column;display:flex;position:absolute;top:0;bottom:0;left:0;right:0}._0iu0NW_header{border-bottom:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-layer-1);flex:none;align-items:center;gap:10px;padding:8px 14px;display:flex}._0iu0NW_headerTitle{color:var(--dsw-alias-label-primary);font-size:14px;font-weight:600}._0iu0NW_headerBadge{color:var(--dsw-alias-label-tertiary);font-size:12px}._0iu0NW_headerSpace{flex:1}._0iu0NW_hotkeyButton{border:1px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);cursor:pointer;white-space:nowrap;background:0 0;border-radius:999px;flex:none;padding:3px 10px;font-size:12px}._0iu0NW_hotkeyButton:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}._0iu0NW_langButton{border:1px solid var(--dsw-alias-border-l2);min-width:58px;color:var(--dsw-alias-label-secondary);cursor:pointer;white-space:nowrap;background:0 0;border-radius:999px;flex:none;padding:3px 10px;font-size:12px}._0iu0NW_langButton:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}._0iu0NW_zoomResetLabel{letter-spacing:-.5px;font-size:9px;font-weight:700}._0iu0NW_closeButton{width:28px;height:28px;color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border:none;border-radius:6px;justify-content:center;align-items:center;padding:0;display:flex}._0iu0NW_closeButton:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}._0iu0NW_canvas{flex:1;min-height:0;position:relative}._0iu0NW_canvas .react-flow__nodesselection{pointer-events:none!important;display:none!important}._0iu0NW_canvas .react-flow__nodesselection-rect{pointer-events:none!important;display:none!important}._0iu0NW_card{border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-1);width:224px;min-height:104px;color:var(--dsw-alias-label-primary);box-shadow:0 1px 3px var(--dsw-alias-bg-mask-1);border-radius:10px;flex-direction:column;gap:6px;padding:10px 12px;font-size:13px;display:flex}._0iu0NW_cardSelected{border-color:var(--dsw-alias-brand-primary)}._0iu0NW_cardGhost{opacity:.55;border-style:dashed}._0iu0NW_cardTop{align-items:center;gap:6px;min-width:0;display:flex}._0iu0NW_cardTitle{-webkit-line-clamp:2;word-break:break-word;-webkit-box-orient:vertical;font-size:13px;font-weight:600;line-height:1.3;display:-webkit-box;overflow:hidden}._0iu0NW_runningDot{background:var(--dsw-alias-state-success-primary);border-radius:50%;flex:none;width:8px;height:8px;animation:1.6s ease-in-out infinite _0iu0NW_talkmap-pulse}@keyframes _0iu0NW_talkmap-pulse{50%{opacity:.35}}._0iu0NW_cardNext{color:var(--dsw-alias-label-secondary);align-items:baseline;gap:6px;min-width:0;font-size:12px;display:flex}._0iu0NW_cardNextLabel{color:var(--dsw-alias-brand-primary);flex:none;font-size:11px;font-weight:600}._0iu0NW_cardNextText{-webkit-line-clamp:2;-webkit-box-orient:vertical;display:-webkit-box;overflow:hidden}._0iu0NW_cardStale{color:var(--dsw-alias-state-warn-primary);flex:none;font-size:12px}._0iu0NW_cardFooter{color:var(--dsw-alias-label-tertiary);justify-content:space-between;align-items:center;gap:8px;margin-top:auto;font-size:11px;display:flex}._0iu0NW_cardTime{flex:none}._0iu0NW_cardBadgeRunning{color:var(--dsw-alias-state-success-primary);background:var(--dsw-alias-state-success-tertiary);border-radius:999px;align-items:center;gap:5px;padding:1px 7px;font-size:10px;display:inline-flex}._0iu0NW_cardSummary{color:var(--dsw-alias-label-secondary);-webkit-line-clamp:2;word-break:break-word;-webkit-box-orient:vertical;font-size:12px;line-height:1.45;display:-webkit-box;overflow:hidden}._0iu0NW_cardBadgeWaiting{color:var(--dsw-alias-state-warn-label);background:var(--dsw-alias-state-warn-tertiary);border-radius:999px;padding:1px 7px;font-size:10px}._0iu0NW_cardBadgeDone{color:var(--dsw-alias-state-success-primary);background:var(--dsw-alias-state-success-tertiary);border-radius:999px;padding:1px 7px;font-size:10px}._0iu0NW_cardRemove{border:1px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border-radius:6px;align-self:flex-start;padding:3px 8px;font-size:12px}._0iu0NW_cardRemove:hover{background:var(--dsw-alias-interactive-bg-hover-danger);color:var(--dsw-alias-state-error-primary)}._0iu0NW_cardHandle{background:var(--dsw-alias-border-l3);border:2px solid var(--dsw-alias-bg-layer-1);opacity:0;width:10px;height:10px}._0iu0NW_card:hover ._0iu0NW_cardHandle,._0iu0NW_canvasConnecting ._0iu0NW_cardHandle{opacity:1}._0iu0NW_cardHandle:hover{background:var(--dsw-alias-brand-primary)}._0iu0NW_cardRefresh{width:22px;height:22px;color:var(--dsw-alias-label-tertiary);cursor:pointer;opacity:0;background:0 0;border:none;border-radius:6px;flex:none;margin-left:auto;padding:0;font-size:13px;line-height:1;transition:opacity .12s}._0iu0NW_card:hover ._0iu0NW_cardRefresh{opacity:1}._0iu0NW_cardRefresh:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}._0iu0NW_cardRefreshBusy{opacity:1;animation:1s linear infinite _0iu0NW_talkmap-spin}@keyframes _0iu0NW_talkmap-spin{to{transform:rotate(360deg)}}._0iu0NW_spawnPanel{z-index:6;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-1);width:420px;max-width:calc(100% - 48px);box-shadow:0 8px 30px var(--dsw-alias-bg-mask-2);border-radius:12px;flex-direction:column;gap:8px;padding:16px;display:flex;position:absolute;top:24px;right:24px}._0iu0NW_spawnHeading{color:var(--dsw-alias-label-primary);font-size:14px;font-weight:600}._0iu0NW_spawnFrom{color:var(--dsw-alias-label-secondary);font-size:12px}._0iu0NW_spawnModes{gap:6px;display:flex}._0iu0NW_spawnModeBtn{border:1px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border-radius:8px;flex:1;padding:5px 0;font-size:12px}._0iu0NW_spawnModeBtn:hover{background:var(--dsw-alias-interactive-bg-hover)}._0iu0NW_spawnModeActive{border-color:var(--dsw-alias-brand-primary);color:var(--dsw-alias-brand-primary);background:var(--dsw-alias-interactive-bg-active)}._0iu0NW_spawnHint{color:var(--dsw-alias-label-tertiary);font-size:12px}._0iu0NW_spawnTextarea{resize:vertical;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-base);width:100%;min-height:140px;color:var(--dsw-alias-label-primary);border-radius:8px;padding:10px;font-family:inherit;font-size:13px;line-height:1.5}._0iu0NW_spawnError{color:var(--dsw-alias-state-error-primary);word-break:break-all;font-size:12px}._0iu0NW_spawnActions{justify-content:flex-end;gap:8px;display:flex}._0iu0NW_spawnBtnPrimary{background:var(--dsw-alias-button-primary-fill);color:var(--dsw-alias-label-primary-foreground);cursor:pointer;border:none;border-radius:8px;padding:6px 16px;font-size:13px}._0iu0NW_spawnBtnPrimary:hover{background:var(--dsw-alias-button-primary-hover)}._0iu0NW_spawnBtnPrimary:disabled{background:var(--dsw-alias-button-primary-dimmed);cursor:default}._0iu0NW_spawnBtnGhost{border:1px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border-radius:8px;padding:6px 16px;font-size:13px}._0iu0NW_spawnBtnGhost:hover{background:var(--dsw-alias-interactive-bg-hover)}._0iu0NW_wsFrame{border:1.5px dashed var(--dsw-alias-border-l2);background:0 0;border-radius:16px;position:relative}._0iu0NW_wsFrameSelected{border-style:solid;border-color:var(--dsw-alias-brand-primary)}._0iu0NW_wsFrameLabel{border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-layer-1);color:var(--dsw-alias-label-secondary);white-space:nowrap;pointer-events:auto;cursor:grab;border-radius:999px;align-items:center;gap:6px;padding:2px 10px;font-size:12px;font-weight:600;display:flex;position:absolute;top:-12px;left:14px}._0iu0NW_wsFrameLabel:active{cursor:grabbing}._0iu0NW_wsFrameEdge{pointer-events:auto;cursor:grab;position:absolute}._0iu0NW_wsFrameEdge:active{cursor:grabbing}._0iu0NW_wsFrameResize{pointer-events:auto;cursor:nwse-resize;border-right:3px solid var(--dsw-alias-border-l3);border-bottom:3px solid var(--dsw-alias-border-l3);opacity:.7;border-bottom-right-radius:14px;width:16px;height:16px;position:absolute;bottom:-2px;right:-2px}._0iu0NW_wsFrameResize:hover{border-color:var(--dsw-alias-brand-primary);opacity:1}._0iu0NW_wsFrameCount{color:var(--dsw-alias-label-tertiary);font-weight:400}._0iu0NW_draftCard{box-sizing:border-box;border:1.5px solid var(--dsw-alias-brand-primary);background:var(--dsw-alias-bg-layer-1);width:360px;box-shadow:0 8px 30px var(--dsw-alias-bg-mask-2);border-radius:12px;flex-direction:column;gap:8px;padding:14px;font-size:13px;display:flex}._0iu0NW_draftHeading{color:var(--dsw-alias-label-primary);font-size:13px;font-weight:600}._0iu0NW_draftRow{align-items:center;gap:8px;display:flex}._0iu0NW_draftLabel{width:52px;color:var(--dsw-alias-label-tertiary);flex:none;font-size:12px}._0iu0NW_draftSelect{box-sizing:border-box;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-base);min-width:0;color:var(--dsw-alias-label-primary);border-radius:7px;flex:1;padding:5px 8px;font-size:12px}._0iu0NW_draftGrow{flex-direction:column;flex:1;gap:3px;min-width:0;display:flex}._0iu0NW_draftInput{box-sizing:border-box;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-base);width:100%;color:var(--dsw-alias-label-primary);border-radius:7px;padding:5px 8px;font-family:inherit;font-size:12px}._0iu0NW_draftPathPreview{color:var(--dsw-alias-label-tertiary);word-break:break-all;font-size:11px}._0iu0NW_draftTextarea{box-sizing:border-box;resize:vertical;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-base);width:100%;min-height:88px;color:var(--dsw-alias-label-primary);border-radius:8px;padding:9px;font-family:inherit;font-size:13px;line-height:1.5}._0iu0NW_colorToolbar{z-index:7;border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-layer-1);box-shadow:0 2px 10px var(--dsw-alias-bg-mask-1);border-radius:10px;align-items:center;gap:6px;padding:6px 10px;display:flex;position:absolute;top:12px;left:12px}._0iu0NW_colorToolbarLabel{color:var(--dsw-alias-label-tertiary);margin-right:2px;font-size:12px}._0iu0NW_colorSwatch{border:1px solid var(--dsw-alias-border-l2);cursor:pointer;width:18px;height:18px;color:var(--dsw-alias-label-secondary);border-radius:50%;justify-content:center;align-items:center;padding:0;font-size:11px;line-height:1;display:flex}._0iu0NW_colorSwatch:hover{transform:scale(1.15)}._0iu0NW_colorSwatchClear{background:0 0}._0iu0NW_menu{z-index:9;border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-layer-1);min-width:200px;max-width:280px;max-height:380px;box-shadow:0 8px 30px var(--dsw-alias-bg-mask-2);border-radius:10px;flex-direction:column;padding:6px;display:flex;position:absolute;overflow-y:auto}._0iu0NW_menuTitle{color:var(--dsw-alias-label-tertiary);flex:none;padding:4px 10px 6px;font-size:11px}._0iu0NW_menuSearch{box-sizing:border-box;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-base);width:calc(100% - 8px);color:var(--dsw-alias-label-primary);border-radius:7px;flex:none;margin:2px 4px 6px;padding:5px 8px;font-family:inherit;font-size:12px}._0iu0NW_menuHint{color:var(--dsw-alias-label-dimmed);font-size:11px}._0iu0NW_menuPreview{color:var(--dsw-alias-label-tertiary);word-break:break-all;flex:none;padding:0 10px 4px;font-size:11px}._0iu0NW_menuError{color:var(--dsw-alias-state-error-primary);word-break:break-all;flex:none;padding:0 10px 4px;font-size:11px}._0iu0NW_menuEmpty{color:var(--dsw-alias-label-tertiary);padding:8px 10px;font-size:12px}._0iu0NW_menuItem{text-align:left;width:100%;color:var(--dsw-alias-label-primary);cursor:pointer;white-space:nowrap;text-overflow:ellipsis;background:0 0;border:none;border-radius:7px;flex:none;padding:6px 10px;font-size:13px;display:block;overflow:hidden}._0iu0NW_menuItem:hover:not(:disabled){background:var(--dsw-alias-interactive-bg-hover)}._0iu0NW_menuItem:disabled{color:var(--dsw-alias-label-dimmed);cursor:default}._0iu0NW_wsFrameHidden{color:var(--dsw-alias-state-warn-primary);font-weight:400}._0iu0NW_emptyHint{color:var(--dsw-alias-label-tertiary);pointer-events:none;z-index:4;font-size:13px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}._0iu0NW_toast{z-index:8;border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-layer-1);max-width:70%;box-shadow:0 4px 16px var(--dsw-alias-bg-mask-2);color:var(--dsw-alias-label-primary);pointer-events:none;white-space:nowrap;text-overflow:ellipsis;border-radius:999px;padding:7px 16px;font-size:12px;position:absolute;bottom:28px;left:50%;overflow:hidden;transform:translate(-50%)}";
+		const css = ".fm7s2a_toggleButton{width:32px;height:32px;color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border:none;border-radius:8px;justify-content:center;align-items:center;gap:6px;padding:0;display:flex}.fm7s2a_toggleButton:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}.fm7s2a_toggleButtonActive{background:var(--dsw-alias-interactive-bg-active);color:var(--dsw-alias-brand-primary)}.fm7s2a_toggleRow{width:100%;color:var(--dsw-alias-label-secondary);cursor:pointer;text-align:left;background:0 0;border:none;border-radius:8px;align-items:center;gap:8px;padding:6px 10px;font-size:13px;display:flex}.fm7s2a_toggleRow:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}.fm7s2a_toggleLabel{white-space:nowrap}.fm7s2a_toggleIcon{flex:none;width:18px;height:18px}.fm7s2a_overlay{background:var(--dsw-alias-bg-base);color:var(--dsw-alias-label-primary);pointer-events:auto;flex-direction:column;display:flex;position:absolute;top:0;bottom:0;left:0;right:0}.fm7s2a_header{border-bottom:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-layer-1);flex:none;align-items:center;gap:10px;padding:8px 14px;display:flex}.fm7s2a_headerTitle{color:var(--dsw-alias-label-primary);font-size:14px;font-weight:600}.fm7s2a_headerBadge{color:var(--dsw-alias-label-tertiary);font-size:12px}.fm7s2a_headerSpace{flex:1}.fm7s2a_hotkeyButton{border:1px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);cursor:pointer;white-space:nowrap;background:0 0;border-radius:999px;flex:none;padding:3px 10px;font-size:12px}.fm7s2a_hotkeyButton:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}.fm7s2a_langButton{border:1px solid var(--dsw-alias-border-l2);min-width:58px;color:var(--dsw-alias-label-secondary);cursor:pointer;white-space:nowrap;background:0 0;border-radius:999px;flex:none;padding:3px 10px;font-size:12px}.fm7s2a_langButton:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}.fm7s2a_zoomResetLabel{letter-spacing:-.5px;font-size:9px;font-weight:700}.fm7s2a_closeButton{width:28px;height:28px;color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border:none;border-radius:6px;justify-content:center;align-items:center;padding:0;display:flex}.fm7s2a_closeButton:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}.fm7s2a_canvas{flex:1;min-height:0;position:relative}.fm7s2a_canvas .react-flow__nodesselection{pointer-events:none!important;display:none!important}.fm7s2a_canvas .react-flow__nodesselection-rect{pointer-events:none!important;display:none!important}.fm7s2a_card{border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-1);width:224px;min-height:104px;color:var(--dsw-alias-label-primary);box-shadow:0 1px 3px var(--dsw-alias-bg-mask-1);border-radius:10px;flex-direction:column;gap:6px;padding:10px 12px;font-size:13px;display:flex}.fm7s2a_cardSelected{border-color:var(--dsw-alias-brand-primary)}.fm7s2a_cardGhost{opacity:.55;border-style:dashed}.fm7s2a_cardTop{align-items:center;gap:6px;min-width:0;display:flex}.fm7s2a_cardTitle{-webkit-line-clamp:2;word-break:break-word;-webkit-box-orient:vertical;font-size:13px;font-weight:600;line-height:1.3;display:-webkit-box;overflow:hidden}.fm7s2a_runningDot{background:var(--dsw-alias-state-success-primary);border-radius:50%;flex:none;width:8px;height:8px;animation:1.6s ease-in-out infinite fm7s2a_talkmap-pulse}@keyframes fm7s2a_talkmap-pulse{50%{opacity:.35}}.fm7s2a_cardNext{color:var(--dsw-alias-label-secondary);align-items:baseline;gap:6px;min-width:0;font-size:12px;display:flex}.fm7s2a_cardNextLabel{color:var(--dsw-alias-brand-primary);flex:none;font-size:11px;font-weight:600}.fm7s2a_cardNextText{-webkit-line-clamp:2;-webkit-box-orient:vertical;display:-webkit-box;overflow:hidden}.fm7s2a_cardStale{color:var(--dsw-alias-state-warn-primary);flex:none;font-size:12px}.fm7s2a_cardFooter{color:var(--dsw-alias-label-tertiary);justify-content:space-between;align-items:center;gap:8px;margin-top:auto;font-size:11px;display:flex}.fm7s2a_cardTime{flex:none}.fm7s2a_cardBadgeRunning{color:var(--dsw-alias-state-success-primary);background:var(--dsw-alias-state-success-tertiary);border-radius:999px;align-items:center;gap:5px;padding:1px 7px;font-size:10px;display:inline-flex}.fm7s2a_cardSummary{color:var(--dsw-alias-label-secondary);-webkit-line-clamp:2;word-break:break-word;-webkit-box-orient:vertical;font-size:12px;line-height:1.45;display:-webkit-box;overflow:hidden}.fm7s2a_cardBadgeWaiting{color:var(--dsw-alias-state-warn-label);background:var(--dsw-alias-state-warn-tertiary);border-radius:999px;padding:1px 7px;font-size:10px}.fm7s2a_cardBadgeDone{color:var(--dsw-alias-state-success-primary);background:var(--dsw-alias-state-success-tertiary);border-radius:999px;padding:1px 7px;font-size:10px}.fm7s2a_cardRemove{border:1px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border-radius:6px;align-self:flex-start;padding:3px 8px;font-size:12px}.fm7s2a_cardRemove:hover{background:var(--dsw-alias-interactive-bg-hover-danger);color:var(--dsw-alias-state-error-primary)}.fm7s2a_cardHandle{background:var(--dsw-alias-border-l3);border:2px solid var(--dsw-alias-bg-layer-1);opacity:0;width:10px;height:10px}.fm7s2a_card:hover .fm7s2a_cardHandle,.fm7s2a_canvasConnecting .fm7s2a_cardHandle{opacity:1}.fm7s2a_cardHandle:hover{background:var(--dsw-alias-brand-primary)}.fm7s2a_cardRefresh{width:22px;height:22px;color:var(--dsw-alias-label-tertiary);cursor:pointer;opacity:0;background:0 0;border:none;border-radius:6px;flex:none;margin-left:auto;padding:0;font-size:13px;line-height:1;transition:opacity .12s}.fm7s2a_card:hover .fm7s2a_cardRefresh{opacity:1}.fm7s2a_cardRefresh:hover{background:var(--dsw-alias-interactive-bg-hover);color:var(--dsw-alias-label-primary)}.fm7s2a_cardRefreshBusy{opacity:1;animation:1s linear infinite fm7s2a_talkmap-spin}@keyframes fm7s2a_talkmap-spin{to{transform:rotate(360deg)}}.fm7s2a_spawnPanel{z-index:6;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-layer-1);width:420px;max-width:calc(100% - 48px);box-shadow:0 8px 30px var(--dsw-alias-bg-mask-2);border-radius:12px;flex-direction:column;gap:8px;padding:16px;display:flex;position:absolute;top:24px;right:24px}.fm7s2a_spawnHeading{color:var(--dsw-alias-label-primary);font-size:14px;font-weight:600}.fm7s2a_spawnFrom{color:var(--dsw-alias-label-secondary);font-size:12px}.fm7s2a_spawnModes{gap:6px;display:flex}.fm7s2a_spawnModeBtn{border:1px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border-radius:8px;flex:1;padding:5px 0;font-size:12px}.fm7s2a_spawnModeBtn:hover{background:var(--dsw-alias-interactive-bg-hover)}.fm7s2a_spawnModeActive{border-color:var(--dsw-alias-brand-primary);color:var(--dsw-alias-brand-primary);background:var(--dsw-alias-interactive-bg-active)}.fm7s2a_spawnHint{color:var(--dsw-alias-label-tertiary);font-size:12px}.fm7s2a_spawnTextarea{resize:vertical;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-base);width:100%;min-height:140px;color:var(--dsw-alias-label-primary);border-radius:8px;padding:10px;font-family:inherit;font-size:13px;line-height:1.5}.fm7s2a_spawnError{color:var(--dsw-alias-state-error-primary);word-break:break-all;font-size:12px}.fm7s2a_spawnActions{justify-content:flex-end;gap:8px;display:flex}.fm7s2a_spawnBtnPrimary{background:var(--dsw-alias-button-primary-fill);color:var(--dsw-alias-label-primary-foreground);cursor:pointer;border:none;border-radius:8px;padding:6px 16px;font-size:13px}.fm7s2a_spawnBtnPrimary:hover{background:var(--dsw-alias-button-primary-hover)}.fm7s2a_spawnBtnPrimary:disabled{background:var(--dsw-alias-button-primary-dimmed);cursor:default}.fm7s2a_spawnBtnGhost{border:1px solid var(--dsw-alias-border-l2);color:var(--dsw-alias-label-secondary);cursor:pointer;background:0 0;border-radius:8px;padding:6px 16px;font-size:13px}.fm7s2a_spawnBtnGhost:hover{background:var(--dsw-alias-interactive-bg-hover)}.fm7s2a_wsFrame{border:1.5px dashed var(--dsw-alias-border-l2);background:0 0;border-radius:16px;position:relative}.fm7s2a_wsFrameSelected{border-style:solid;border-color:var(--dsw-alias-brand-primary)}.fm7s2a_wsFrameLabel{border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-layer-1);color:var(--dsw-alias-label-secondary);white-space:nowrap;pointer-events:auto;cursor:grab;border-radius:999px;align-items:center;gap:6px;padding:2px 10px;font-size:12px;font-weight:600;display:flex;position:absolute;top:-12px;left:14px}.fm7s2a_wsFrameLabel:active{cursor:grabbing}.fm7s2a_wsFrameEdge{pointer-events:auto;cursor:grab;position:absolute}.fm7s2a_wsFrameEdge:active{cursor:grabbing}.fm7s2a_wsFrameResize{pointer-events:auto;cursor:nwse-resize;border-right:3px solid var(--dsw-alias-border-l3);border-bottom:3px solid var(--dsw-alias-border-l3);opacity:.7;border-bottom-right-radius:14px;width:16px;height:16px;position:absolute;bottom:-2px;right:-2px}.fm7s2a_wsFrameResize:hover{border-color:var(--dsw-alias-brand-primary);opacity:1}.fm7s2a_wsFrameCount{color:var(--dsw-alias-label-tertiary);font-weight:400}.fm7s2a_draftCard{box-sizing:border-box;border:1.5px solid var(--dsw-alias-brand-primary);background:var(--dsw-alias-bg-layer-1);width:360px;box-shadow:0 8px 30px var(--dsw-alias-bg-mask-2);border-radius:12px;flex-direction:column;gap:8px;padding:14px;font-size:13px;display:flex}.fm7s2a_draftHeading{color:var(--dsw-alias-label-primary);font-size:13px;font-weight:600}.fm7s2a_draftRow{align-items:center;gap:8px;display:flex}.fm7s2a_draftLabel{width:52px;color:var(--dsw-alias-label-tertiary);flex:none;font-size:12px}.fm7s2a_draftSelect{box-sizing:border-box;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-base);min-width:0;color:var(--dsw-alias-label-primary);border-radius:7px;flex:1;padding:5px 8px;font-size:12px}.fm7s2a_draftGrow{flex-direction:column;flex:1;gap:3px;min-width:0;display:flex}.fm7s2a_draftInput{box-sizing:border-box;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-base);width:100%;color:var(--dsw-alias-label-primary);border-radius:7px;padding:5px 8px;font-family:inherit;font-size:12px}.fm7s2a_draftPathPreview{color:var(--dsw-alias-label-tertiary);word-break:break-all;font-size:11px}.fm7s2a_draftTextarea{box-sizing:border-box;resize:vertical;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-base);width:100%;min-height:88px;color:var(--dsw-alias-label-primary);border-radius:8px;padding:9px;font-family:inherit;font-size:13px;line-height:1.5}.fm7s2a_colorToolbar{z-index:7;border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-layer-1);box-shadow:0 2px 10px var(--dsw-alias-bg-mask-1);border-radius:10px;align-items:center;gap:6px;padding:6px 10px;display:flex;position:absolute;top:12px;left:12px}.fm7s2a_colorToolbarLabel{color:var(--dsw-alias-label-tertiary);margin-right:2px;font-size:12px}.fm7s2a_colorSwatch{border:1px solid var(--dsw-alias-border-l2);cursor:pointer;width:18px;height:18px;color:var(--dsw-alias-label-secondary);border-radius:50%;justify-content:center;align-items:center;padding:0;font-size:11px;line-height:1;display:flex}.fm7s2a_colorSwatch:hover{transform:scale(1.15)}.fm7s2a_colorSwatchClear{background:0 0}.fm7s2a_menu{z-index:9;border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-layer-1);min-width:200px;max-width:280px;max-height:380px;box-shadow:0 8px 30px var(--dsw-alias-bg-mask-2);border-radius:10px;flex-direction:column;padding:6px;display:flex;position:absolute;overflow-y:auto}.fm7s2a_menuTitle{color:var(--dsw-alias-label-tertiary);flex:none;padding:4px 10px 6px;font-size:11px}.fm7s2a_menuSearch{box-sizing:border-box;border:1px solid var(--dsw-alias-border-l2);background:var(--dsw-alias-bg-base);width:calc(100% - 8px);color:var(--dsw-alias-label-primary);border-radius:7px;flex:none;margin:2px 4px 6px;padding:5px 8px;font-family:inherit;font-size:12px}.fm7s2a_menuHint{color:var(--dsw-alias-label-dimmed);font-size:11px}.fm7s2a_menuPreview{color:var(--dsw-alias-label-tertiary);word-break:break-all;flex:none;padding:0 10px 4px;font-size:11px}.fm7s2a_menuError{color:var(--dsw-alias-state-error-primary);word-break:break-all;flex:none;padding:0 10px 4px;font-size:11px}.fm7s2a_menuEmpty{color:var(--dsw-alias-label-tertiary);padding:8px 10px;font-size:12px}.fm7s2a_menuItem{text-align:left;width:100%;color:var(--dsw-alias-label-primary);cursor:pointer;white-space:nowrap;text-overflow:ellipsis;background:0 0;border:none;border-radius:7px;flex:none;padding:6px 10px;font-size:13px;display:block;overflow:hidden}.fm7s2a_menuItem:hover:not(:disabled){background:var(--dsw-alias-interactive-bg-hover)}.fm7s2a_menuItem:disabled{color:var(--dsw-alias-label-dimmed);cursor:default}.fm7s2a_wsFrameHidden{color:var(--dsw-alias-state-warn-primary);font-weight:400}.fm7s2a_emptyHint{color:var(--dsw-alias-label-tertiary);pointer-events:none;z-index:4;font-size:13px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}.fm7s2a_toast{z-index:8;border:1px solid var(--dsw-alias-border-l1);background:var(--dsw-alias-bg-layer-1);max-width:70%;box-shadow:0 4px 16px var(--dsw-alias-bg-mask-2);color:var(--dsw-alias-label-primary);pointer-events:none;white-space:nowrap;text-overflow:ellipsis;border-radius:999px;padding:7px 16px;font-size:12px;position:absolute;bottom:28px;left:50%;overflow:hidden;transform:translate(-50%)}";
 		const tagId = "dsh-talk-map/talk-map.module.css";
 		if (typeof document !== "undefined" && document.querySelector("style[data-plugin-css=" + JSON.stringify(tagId) + "]") === null) {
 			const tag = document.createElement("style");
@@ -11514,86 +11540,86 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 			document.head.appendChild(tag);
 		}
 		var talk_map_module_css_default = {
-			"runningDot": "_0iu0NW_runningDot",
-			"langButton": "_0iu0NW_langButton",
-			"cardGhost": "_0iu0NW_cardGhost",
-			"cardNextLabel": "_0iu0NW_cardNextLabel",
-			"cardBadgeDone": "_0iu0NW_cardBadgeDone",
-			"draftHeading": "_0iu0NW_draftHeading",
-			"draftTextarea": "_0iu0NW_draftTextarea",
-			"colorSwatchClear": "_0iu0NW_colorSwatchClear",
-			"emptyHint": "_0iu0NW_emptyHint",
-			"cardNextText": "_0iu0NW_cardNextText",
-			"wsFrame": "_0iu0NW_wsFrame",
-			"spawnBtnGhost": "_0iu0NW_spawnBtnGhost",
-			"talkmap-spin": "_0iu0NW_talkmap-spin",
-			"spawnModes": "_0iu0NW_spawnModes",
-			"talkmap-pulse": "_0iu0NW_talkmap-pulse",
-			"toggleRow": "_0iu0NW_toggleRow",
-			"toggleIcon": "_0iu0NW_toggleIcon",
-			"colorSwatch": "_0iu0NW_colorSwatch",
-			"colorToolbarLabel": "_0iu0NW_colorToolbarLabel",
-			"cardRemove": "_0iu0NW_cardRemove",
-			"cardNext": "_0iu0NW_cardNext",
-			"cardHandle": "_0iu0NW_cardHandle",
-			"draftInput": "_0iu0NW_draftInput",
-			"menuTitle": "_0iu0NW_menuTitle",
-			"spawnModeActive": "_0iu0NW_spawnModeActive",
-			"toast": "_0iu0NW_toast",
-			"wsFrameHidden": "_0iu0NW_wsFrameHidden",
-			"menuHint": "_0iu0NW_menuHint",
-			"menuSearch": "_0iu0NW_menuSearch",
-			"draftGrow": "_0iu0NW_draftGrow",
-			"menuPreview": "_0iu0NW_menuPreview",
-			"draftSelect": "_0iu0NW_draftSelect",
-			"spawnTextarea": "_0iu0NW_spawnTextarea",
-			"cardSummary": "_0iu0NW_cardSummary",
-			"cardTime": "_0iu0NW_cardTime",
-			"colorToolbar": "_0iu0NW_colorToolbar",
-			"spawnPanel": "_0iu0NW_spawnPanel",
-			"wsFrameCount": "_0iu0NW_wsFrameCount",
-			"wsFrameResize": "_0iu0NW_wsFrameResize",
-			"headerSpace": "_0iu0NW_headerSpace",
-			"headerTitle": "_0iu0NW_headerTitle",
-			"cardTitle": "_0iu0NW_cardTitle",
-			"spawnError": "_0iu0NW_spawnError",
-			"draftRow": "_0iu0NW_draftRow",
-			"zoomResetLabel": "_0iu0NW_zoomResetLabel",
-			"draftLabel": "_0iu0NW_draftLabel",
-			"menuError": "_0iu0NW_menuError",
-			"menu": "_0iu0NW_menu",
-			"spawnBtnPrimary": "_0iu0NW_spawnBtnPrimary",
-			"toggleButton": "_0iu0NW_toggleButton",
-			"spawnHint": "_0iu0NW_spawnHint",
-			"header": "_0iu0NW_header",
-			"card": "_0iu0NW_card",
-			"spawnActions": "_0iu0NW_spawnActions",
-			"menuItem": "_0iu0NW_menuItem",
-			"overlay": "_0iu0NW_overlay",
-			"toggleLabel": "_0iu0NW_toggleLabel",
-			"closeButton": "_0iu0NW_closeButton",
-			"cardFooter": "_0iu0NW_cardFooter",
-			"cardBadgeRunning": "_0iu0NW_cardBadgeRunning",
-			"canvasConnecting": "_0iu0NW_canvasConnecting",
-			"spawnHeading": "_0iu0NW_spawnHeading",
-			"wsFrameSelected": "_0iu0NW_wsFrameSelected",
-			"headerBadge": "_0iu0NW_headerBadge",
-			"cardRefresh": "_0iu0NW_cardRefresh",
-			"draftCard": "_0iu0NW_draftCard",
-			"wsFrameLabel": "_0iu0NW_wsFrameLabel",
-			"toggleButtonActive": "_0iu0NW_toggleButtonActive",
-			"cardTop": "_0iu0NW_cardTop",
-			"spawnModeBtn": "_0iu0NW_spawnModeBtn",
-			"cardStale": "_0iu0NW_cardStale",
-			"menuEmpty": "_0iu0NW_menuEmpty",
-			"wsFrameEdge": "_0iu0NW_wsFrameEdge",
-			"cardRefreshBusy": "_0iu0NW_cardRefreshBusy",
-			"cardBadgeWaiting": "_0iu0NW_cardBadgeWaiting",
-			"hotkeyButton": "_0iu0NW_hotkeyButton",
-			"cardSelected": "_0iu0NW_cardSelected",
-			"canvas": "_0iu0NW_canvas",
-			"draftPathPreview": "_0iu0NW_draftPathPreview",
-			"spawnFrom": "_0iu0NW_spawnFrom"
+			"colorSwatch": "fm7s2a_colorSwatch",
+			"draftHeading": "fm7s2a_draftHeading",
+			"draftCard": "fm7s2a_draftCard",
+			"spawnBtnGhost": "fm7s2a_spawnBtnGhost",
+			"draftRow": "fm7s2a_draftRow",
+			"spawnActions": "fm7s2a_spawnActions",
+			"closeButton": "fm7s2a_closeButton",
+			"spawnBtnPrimary": "fm7s2a_spawnBtnPrimary",
+			"spawnTextarea": "fm7s2a_spawnTextarea",
+			"colorToolbarLabel": "fm7s2a_colorToolbarLabel",
+			"cardRefreshBusy": "fm7s2a_cardRefreshBusy",
+			"wsFrameResize": "fm7s2a_wsFrameResize",
+			"menuEmpty": "fm7s2a_menuEmpty",
+			"toggleLabel": "fm7s2a_toggleLabel",
+			"cardRefresh": "fm7s2a_cardRefresh",
+			"talkmap-pulse": "fm7s2a_talkmap-pulse",
+			"spawnFrom": "fm7s2a_spawnFrom",
+			"menu": "fm7s2a_menu",
+			"wsFrameHidden": "fm7s2a_wsFrameHidden",
+			"cardBadgeWaiting": "fm7s2a_cardBadgeWaiting",
+			"cardTitle": "fm7s2a_cardTitle",
+			"wsFrameEdge": "fm7s2a_wsFrameEdge",
+			"headerBadge": "fm7s2a_headerBadge",
+			"cardBadgeDone": "fm7s2a_cardBadgeDone",
+			"cardRemove": "fm7s2a_cardRemove",
+			"headerSpace": "fm7s2a_headerSpace",
+			"spawnError": "fm7s2a_spawnError",
+			"cardTime": "fm7s2a_cardTime",
+			"header": "fm7s2a_header",
+			"menuTitle": "fm7s2a_menuTitle",
+			"wsFrameCount": "fm7s2a_wsFrameCount",
+			"cardFooter": "fm7s2a_cardFooter",
+			"card": "fm7s2a_card",
+			"wsFrameSelected": "fm7s2a_wsFrameSelected",
+			"zoomResetLabel": "fm7s2a_zoomResetLabel",
+			"draftSelect": "fm7s2a_draftSelect",
+			"draftPathPreview": "fm7s2a_draftPathPreview",
+			"canvasConnecting": "fm7s2a_canvasConnecting",
+			"cardNext": "fm7s2a_cardNext",
+			"hotkeyButton": "fm7s2a_hotkeyButton",
+			"spawnModeBtn": "fm7s2a_spawnModeBtn",
+			"cardSummary": "fm7s2a_cardSummary",
+			"cardSelected": "fm7s2a_cardSelected",
+			"cardHandle": "fm7s2a_cardHandle",
+			"menuHint": "fm7s2a_menuHint",
+			"talkmap-spin": "fm7s2a_talkmap-spin",
+			"cardNextLabel": "fm7s2a_cardNextLabel",
+			"colorSwatchClear": "fm7s2a_colorSwatchClear",
+			"canvas": "fm7s2a_canvas",
+			"menuItem": "fm7s2a_menuItem",
+			"cardStale": "fm7s2a_cardStale",
+			"toast": "fm7s2a_toast",
+			"spawnModes": "fm7s2a_spawnModes",
+			"spawnHint": "fm7s2a_spawnHint",
+			"menuSearch": "fm7s2a_menuSearch",
+			"cardGhost": "fm7s2a_cardGhost",
+			"menuPreview": "fm7s2a_menuPreview",
+			"headerTitle": "fm7s2a_headerTitle",
+			"emptyHint": "fm7s2a_emptyHint",
+			"spawnHeading": "fm7s2a_spawnHeading",
+			"draftGrow": "fm7s2a_draftGrow",
+			"draftInput": "fm7s2a_draftInput",
+			"menuError": "fm7s2a_menuError",
+			"toggleButton": "fm7s2a_toggleButton",
+			"cardTop": "fm7s2a_cardTop",
+			"wsFrameLabel": "fm7s2a_wsFrameLabel",
+			"runningDot": "fm7s2a_runningDot",
+			"langButton": "fm7s2a_langButton",
+			"wsFrame": "fm7s2a_wsFrame",
+			"spawnPanel": "fm7s2a_spawnPanel",
+			"spawnModeActive": "fm7s2a_spawnModeActive",
+			"draftLabel": "fm7s2a_draftLabel",
+			"cardNextText": "fm7s2a_cardNextText",
+			"colorToolbar": "fm7s2a_colorToolbar",
+			"cardBadgeRunning": "fm7s2a_cardBadgeRunning",
+			"toggleButtonActive": "fm7s2a_toggleButtonActive",
+			"overlay": "fm7s2a_overlay",
+			"draftTextarea": "fm7s2a_draftTextarea",
+			"toggleRow": "fm7s2a_toggleRow",
+			"toggleIcon": "fm7s2a_toggleIcon"
 		};
 		//#endregion
 		//#region src/client/ContextMenu.tsx
@@ -11741,8 +11767,7 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 		const NEW_WORKSPACE = "__new__";
 		const GRID$1 = 16;
 		const snap$1 = (value) => Math.round(value / GRID$1) * GRID$1;
-		function unwrap$1(response, what) {
-			const { result } = response;
+		function unwrap$1(result, what) {
 			if (result.ok) return result.value;
 			throw new Error(`${what}: ${result.error.code ?? ""} ${result.error.message ?? ""}`.trim());
 		}
@@ -11785,12 +11810,12 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 			(0, react.useEffect)(() => {
 				const services = getServices();
 				if (services === void 0) return;
-				services.connection.api.llm.models({}).then((response) => {
-					if (response.result.ok) setGroups(response.result.value.groups ?? []);
+				services.remote.session.modelCatalog().then((result) => {
+					if (result.ok) setGroups([...result.value.groups ?? []]);
 				}).catch(() => void 0);
-				services.connection.api.agentPresets.list({}).then((response) => {
-					if (response.result.ok) {
-						const list = response.result.value.presets;
+				services.remote.agentPresets.list().then((result) => {
+					if (result.ok) {
+						const list = result.value.presets;
 						setPresets(list);
 						if (list.some((preset) => preset.id === "standard")) setPresetId((previous) => previous === "" ? "standard" : previous);
 					}
@@ -11812,12 +11837,12 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 					let targetWorkspaceId = workspaceId;
 					if (creatingWorkspace) {
 						await talkMapApi.ensureDir(newWsPath);
-						targetWorkspaceId = unwrap$1(await services.connection.api.workspace.create({ path: newWsPath }), "workspace.create").workspace.workspaceId;
+						targetWorkspaceId = (await services.workspaces.create({ path: newWsPath })).workspaceId;
 					}
-					const sessionId = unwrap$1(await services.connection.api.sessions.create({
+					const sessionId = await services.sessions.create({
 						workspaceId: targetWorkspaceId,
 						...presetId !== "" ? { agentPreset: presetId } : {}
-					}), "session.create").sessionId;
+					});
 					const cardX = snap$1(props.positionAbsoluteX);
 					const cardY = snap$1(props.positionAbsoluteY);
 					canvas.addCards({ [newCardId()]: {
@@ -11839,13 +11864,14 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 					}
 					if (modelKey !== "") {
 						const [provider, model] = modelKey.split("::");
-						unwrap$1(await services.connection.api.sessions.selectModel({
+						unwrap$1(await services.remote.session.selectModel({
 							sessionId,
 							provider,
 							model
 						}), "session.selectModel");
 					}
-					unwrap$1(await services.connection.api.sessions.prompt({
+					unwrap$1(await services.remote.session.prompt({
+						requestId: randomUUID(),
 						sessionId,
 						mode: "queue",
 						content: [{
@@ -11856,7 +11882,7 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 					}), "session.prompt");
 					data.onClose();
 					mapUi.setOpen(false);
-					services.sessions.open(sessionId);
+					services.uiWorkspace.openSession(sessionId);
 				} catch (sendError) {
 					setError(String(sendError));
 					setBusy(false);
@@ -12144,8 +12170,7 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 		*   full   — dsh-native fork: the child carries the parent's full history
 		* All modes drop the new card at the release point and jump into the chat.
 		*/
-		function unwrap(response, what) {
-			const { result } = response;
+		function unwrap(result, what) {
 			if (result.ok) return result.value;
 			throw new Error(`${what}: ${result.error.code ?? ""} ${result.error.message ?? ""}`.trim());
 		}
@@ -12181,7 +12206,7 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 					createdAt: Date.now()
 				};
 				canvas.addCards({ [cardId]: card });
-				canvas.addEdges({ [`edge-${crypto.randomUUID()}`]: {
+				canvas.addEdges({ [`edge-${randomUUID()}`]: {
 					boardId: INBOX_BOARD_ID,
 					fromCardId: pending.parent.cardId,
 					toCardId: cardId,
@@ -12198,7 +12223,7 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 				const services = getServices();
 				if (services !== void 0) {
 					mapUi.setOpen(false);
-					services.sessions.open(sessionId);
+					services.uiWorkspace.openSession(sessionId);
 				}
 			};
 			const confirm = async () => {
@@ -12210,13 +12235,13 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 				try {
 					if (mode === "digest") {
 						if (text.trim() === "") throw new Error(t("spawn.needText"));
-						const created = unwrap(await services.connection.api.sessions.create(pending.parentWorkspaceId !== void 0 ? { workspaceId: pending.parentWorkspaceId } : {}), "session.create");
-						await talkMapApi.injectContext(created.sessionId, [{
+						const sessionId = await services.sessions.create(pending.parentWorkspaceId !== void 0 ? { workspaceId: pending.parentWorkspaceId } : {});
+						await talkMapApi.injectContext(sessionId, [{
 							sessionId: pending.parent.sessionId,
 							text
 						}]);
-						addCardAndEdge(created.sessionId, "digest", text);
-						jumpIn(created.sessionId);
+						addCardAndEdge(sessionId, "digest", text);
+						jumpIn(sessionId);
 						return;
 					}
 					if (mode === "full") {
@@ -12226,10 +12251,11 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 						return;
 					}
 					if (firstMessage.trim() === "") throw new Error(t("spawn.needFirstMessage"));
-					const created = unwrap(await services.connection.api.sessions.create(pending.parentWorkspaceId !== void 0 ? { workspaceId: pending.parentWorkspaceId } : {}), "session.create");
-					addCardAndEdge(created.sessionId, "none");
-					unwrap(await services.connection.api.sessions.prompt({
-						sessionId: created.sessionId,
+					const sessionId = await services.sessions.create(pending.parentWorkspaceId !== void 0 ? { workspaceId: pending.parentWorkspaceId } : {});
+					addCardAndEdge(sessionId, "none");
+					unwrap(await services.remote.session.prompt({
+						requestId: randomUUID(),
+						sessionId,
 						mode: "queue",
 						content: [{
 							type: "text",
@@ -12237,7 +12263,7 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 						}],
 						clientTimeZone: Intl.DateTimeFormat().resolvedOptions().timeZone
 					}), "session.prompt");
-					jumpIn(created.sessionId);
+					jumpIn(sessionId);
 				} catch (spawnError) {
 					setError(String(spawnError));
 					setBusy(false);
@@ -12502,11 +12528,18 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 				height: maxY - minY + 64 + FRAME_LABEL_H
 			};
 		}
+		/**
+		* Stand-in for `useSessionStatus` on a shell that does not deliver it: the
+		* badges read an always-empty map, so they stay hidden instead of throwing.
+		*/
+		const EMPTY_SESSION_STATUS = /* @__PURE__ */ new Map();
+		const NO_SESSION_STATUS_HOOK = (selector) => selector(EMPTY_SESSION_STATUS);
 		function CanvasInner(props) {
 			const dark = useDsDarkTheme();
 			const canvasState = (0, react.useSyncExternalStore)(canvas.subscribe, canvas.get);
 			const sessions = props.useSessions((state) => state);
 			const workspaces = props.useWorkspaces((state) => state);
+			const sessionStatus = (props.useSessionStatus ?? NO_SESSION_STATUS_HOOK)((state) => state);
 			const { screenToFlowPosition, zoomTo } = useReactFlow();
 			const [selectedIds, setSelectedIds] = (0, react.useState)(/* @__PURE__ */ new Set());
 			const [selectedEdgeIds, setSelectedEdgeIds] = (0, react.useState)(/* @__PURE__ */ new Set());
@@ -12524,7 +12557,7 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 			const locale = (0, react.useSyncExternalStore)(subscribeLocale, activeLocale, activeLocale);
 			const sessionWs = (0, react.useMemo)(() => sessionWorkspaceIndex(workspaces), [workspaces]);
 			const wsTitles = (0, react.useMemo)(() => new Map(workspaces.items.map((item) => [item.workspaceId, item.title])), [workspaces]);
-			const workspacesReady = workspaces.baselinesReady !== false;
+			const workspacesReady = workspaces.phase !== "pending";
 			const wsFrames = canvasState.global?.wsFrames ?? {};
 			const layoutVersion = canvasState.global?.layoutVersion ?? 1;
 			(0, react.useEffect)(() => {
@@ -12705,8 +12738,8 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 						updatedAt: summary?.updatedAt,
 						nextStep: digest?.nextStep ?? digest?.todoNext,
 						summary: digest?.summary,
-						waiting: summary?.pendingInteraction !== void 0,
-						done: summary?.completed === true,
+						waiting: sessionStatus.get(card.sessionId)?.pendingInteraction !== void 0,
+						done: sessionStatus.get(card.sessionId)?.completionUnread === true,
 						...card.colorTag !== void 0 ? { colorTag: card.colorTag } : {}
 					};
 					return {
@@ -12755,6 +12788,7 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 				canvasState.digests,
 				canvasState.global,
 				sessions,
+				sessionStatus,
 				liveSelectedIds,
 				draft,
 				workspaces.items,
@@ -12963,7 +12997,7 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 				if (fromCard === void 0 || toCard === void 0) return;
 				const geometry = sideHandles(fromCard, toCard);
 				const fromTitle = sessions.byId[fromCard.sessionId]?.displayTitle;
-				canvas.addEdges({ [`edge-${crypto.randomUUID()}`]: {
+				canvas.addEdges({ [`edge-${randomUUID()}`]: {
 					boardId: INBOX_BOARD_ID,
 					fromCardId,
 					toCardId,
@@ -13045,7 +13079,7 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 				const services = getServices();
 				if (services === void 0) return;
 				mapUi.setOpen(false);
-				services.sessions.open(sessionId);
+				services.uiWorkspace.openSession(sessionId);
 			};
 			const groupAtPoint = (x, y) => {
 				for (const [groupId, rect] of Object.entries(wsFrames)) if (x >= rect.x && x <= rect.x + rect.width && y >= rect.y && y <= rect.y + rect.height) return groupId;
@@ -13210,9 +13244,8 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 								if (services === void 0 || parentDir === "") throw new Error("no workspace root available");
 								const path = `${parentDir}/${value}`;
 								await talkMapApi.ensureDir(path);
-								const response = await services.connection.api.workspace.create({ path });
-								if (!response.result.ok) throw new Error(`workspace.create: ${response.result.error.message ?? response.result.error.code ?? ""}`);
-								importWorkspace(response.result.value.workspace.workspaceId, menu.flowX, menu.flowY);
+								const workspace = await services.workspaces.create({ path });
+								importWorkspace(workspace.workspaceId, menu.flowX, menu.flowY);
 								close();
 							}
 						},
@@ -13760,7 +13793,8 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 			"slots",
 			"sessions",
 			"workspaces",
-			"connection"
+			"remote",
+			"uiWorkspace"
 		];
 		let applied = false;
 		function apply(ctx) {
@@ -13773,7 +13807,8 @@ window.__ModuleLoader__.load({ id: "dsh-talk-map", factory: (require) => {
 				attachServices({
 					sessions: ctx.sessions,
 					workspaces: ctx.workspaces,
-					connection: ctx.connection
+					remote: ctx.remote,
+					uiWorkspace: ctx.uiWorkspace
 				});
 				ctx.effect(() => () => {
 					attachServices(void 0);

@@ -12,6 +12,7 @@ import { talkMapApi } from './api.ts'
 import { canvas, INBOX_BOARD_ID, newCardId } from './canvas-store.ts'
 import { buildInjectionText } from './digest-text.ts'
 import { getServices, mapUi } from './map-state.ts'
+import { randomUUID } from './uuid.ts'
 import { t } from './i18n.ts'
 import type { Card, EdgeInjection } from '../shared/model.ts'
 import styles from './talk-map.module.css'
@@ -27,8 +28,7 @@ export interface PendingSpawn {
 
 type SpawnMode = 'none' | 'digest' | 'full'
 
-function unwrap<T>(response: { result: { ok: true; value: T } | { ok: false; error: { code?: string; message?: string } } }, what: string): T {
-  const { result } = response
+function unwrap<T>(result: { ok: true; value: T } | { ok: false; error: { code?: string; message?: string } }, what: string): T {
   if (result.ok) return result.value
   throw new Error(`${what}: ${result.error.code ?? ''} ${result.error.message ?? ''}`.trim())
 }
@@ -72,7 +72,7 @@ export function SpawnPreview(props: {
     }
     canvas.addCards({ [cardId]: card })
     canvas.addEdges({
-      [`edge-${crypto.randomUUID()}`]: {
+      [`edge-${randomUUID()}`]: {
         boardId: INBOX_BOARD_ID,
         fromCardId: pending.parent.cardId,
         toCardId: cardId,
@@ -88,7 +88,7 @@ export function SpawnPreview(props: {
     const services = getServices()
     if (services !== undefined) {
       mapUi.setOpen(false)
-      services.sessions.open(sessionId)
+      services.uiWorkspace.openSession(sessionId)
     }
   }
 
@@ -104,14 +104,14 @@ export function SpawnPreview(props: {
         // The session comes from dsh's own create RPC — full composition
         // (tools, preset, workspace binding) identical to a normal new chat.
         // The plugin only injects the digest into it afterwards.
-        const created = unwrap(await services.connection.api.sessions.create(
+        const sessionId = await services.sessions.create(
           pending.parentWorkspaceId !== undefined ? { workspaceId: pending.parentWorkspaceId } : {},
-        ), 'session.create')
-        await talkMapApi.injectContext(created.sessionId, [
+        )
+        await talkMapApi.injectContext(sessionId, [
           { sessionId: pending.parent.sessionId, text },
         ])
-        addCardAndEdge(created.sessionId, 'digest', text)
-        jumpIn(created.sessionId)
+        addCardAndEdge(sessionId, 'digest', text)
+        jumpIn(sessionId)
         return
       }
       if (mode === 'full') {
@@ -125,17 +125,18 @@ export function SpawnPreview(props: {
       // linked visually. A first message is required — an empty session
       // would be blank and invisible on the board.
       if (firstMessage.trim() === '') throw new Error(t('spawn.needFirstMessage'))
-      const created = unwrap(await services.connection.api.sessions.create(
+      const sessionId = await services.sessions.create(
         pending.parentWorkspaceId !== undefined ? { workspaceId: pending.parentWorkspaceId } : {},
-      ), 'session.create')
-      addCardAndEdge(created.sessionId, 'none')
-      unwrap(await services.connection.api.sessions.prompt({
-        sessionId: created.sessionId,
+      )
+      addCardAndEdge(sessionId, 'none')
+      unwrap(await services.remote.session.prompt({
+        requestId: randomUUID(),
+        sessionId,
         mode: 'queue',
         content: [{ type: 'text', text: firstMessage }],
         clientTimeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       }), 'session.prompt')
-      jumpIn(created.sessionId)
+      jumpIn(sessionId)
     } catch (spawnError) {
       setError(String(spawnError))
       setBusy(false)

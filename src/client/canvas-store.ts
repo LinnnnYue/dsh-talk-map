@@ -7,6 +7,7 @@
  */
 import { talkMapApi } from './api.ts'
 import { setLocalePref } from './i18n.ts'
+import { randomUUID } from './uuid.ts'
 import type { Card, Digest, FrameGeometry, MapEdgeData, MapGlobal, Camera } from '../shared/model.ts'
 import { INBOX_BOARD_ID } from '../shared/model.ts'
 
@@ -406,7 +407,7 @@ export const canvas = {
 }
 
 export function newCardId(): string {
-  return `card-${crypto.randomUUID()}`
+  return `card-${randomUUID()}`
 }
 
 export { INBOX_BOARD_ID }

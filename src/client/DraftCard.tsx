@@ -17,6 +17,7 @@ import type { AgentPresetEntry, ModelProviderGroup } from './dsh.ts'
 import { talkMapApi } from './api.ts'
 import { canvas, INBOX_BOARD_ID, newCardId } from './canvas-store.ts'
 import { getServices, mapUi } from './map-state.ts'
+import { randomUUID } from './uuid.ts'
 import { t } from './i18n.ts'
 import styles from './talk-map.module.css'
 
@@ -36,8 +37,7 @@ const NEW_WORKSPACE = '__new__'
 const GRID = 16
 const snap = (value: number): number => Math.round(value / GRID) * GRID
 
-function unwrap<T>(response: { result: { ok: true; value: T } | { ok: false; error: { code?: string; message?: string } } }, what: string): T {
-  const { result } = response
+function unwrap<T>(result: { ok: true; value: T } | { ok: false; error: { code?: string; message?: string } }, what: string): T {
   if (result.ok) return result.value
   throw new Error(`${what}: ${result.error.code ?? ''} ${result.error.message ?? ''}`.trim())
 }
@@ -85,12 +85,12 @@ export function DraftCardNode(props: NodeProps<DraftCardNodeType>): React.JSX.El
   useEffect(() => {
     const services = getServices()
     if (services === undefined) return
-    services.connection.api.llm.models({}).then((response) => {
-      if (response.result.ok) setGroups(response.result.value.groups ?? [])
+    services.remote.session.modelCatalog().then((result) => {
+      if (result.ok) setGroups([...(result.value.groups ?? [])])
     }).catch(() => undefined)
-    services.connection.api.agentPresets.list({}).then((response) => {
-      if (response.result.ok) {
-        const list = response.result.value.presets
+    services.remote.agentPresets.list().then((result) => {
+      if (result.ok) {
+        const list = result.value.presets
         setPresets(list)
         // Prefer the plain "standard" preset for map-born conversations —
         // the deployment default may be a specialized mode (e.g. cordis).
@@ -120,17 +120,13 @@ export function DraftCardNode(props: NodeProps<DraftCardNodeType>): React.JSX.El
       if (creatingWorkspace) {
         // dsh only registers existing directories — create the folder first.
         await talkMapApi.ensureDir(newWsPath)
-        const created = unwrap(
-          await services.connection.api.workspace.create({ path: newWsPath }),
-          'workspace.create',
-        )
-        targetWorkspaceId = created.workspace.workspaceId
+        const created = await services.workspaces.create({ path: newWsPath })
+        targetWorkspaceId = created.workspaceId
       }
-      const created = unwrap(await services.connection.api.sessions.create({
+      const sessionId = await services.sessions.create({
         workspaceId: targetWorkspaceId,
         ...(presetId !== '' ? { agentPreset: presetId } : {}),
-      }), 'session.create')
-      const sessionId = created.sessionId
+      })
       const cardX = snap(props.positionAbsoluteX)
       const cardY = snap(props.positionAbsoluteY)
       // The card's map group follows the chosen workspace (not merely the
@@ -160,9 +156,10 @@ export function DraftCardNode(props: NodeProps<DraftCardNodeType>): React.JSX.El
       }
       if (modelKey !== '') {
         const [provider, model] = modelKey.split('::') as [string, string]
-        unwrap(await services.connection.api.sessions.selectModel({ sessionId, provider, model }), 'session.selectModel')
+        unwrap(await services.remote.session.selectModel({ sessionId, provider, model }), 'session.selectModel')
       }
-      unwrap(await services.connection.api.sessions.prompt({
+      unwrap(await services.remote.session.prompt({
+        requestId: randomUUID(),
         sessionId,
         mode: 'queue',
         content: [{ type: 'text', text }],
@@ -171,7 +168,7 @@ export function DraftCardNode(props: NodeProps<DraftCardNodeType>): React.JSX.El
       data.onClose()
       // Jump straight into the running conversation.
       mapUi.setOpen(false)
-      services.sessions.open(sessionId)
+      services.uiWorkspace.openSession(sessionId)
     } catch (sendError) {
       setError(String(sendError))
       setBusy(false)

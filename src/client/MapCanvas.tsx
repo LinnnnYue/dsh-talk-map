@@ -19,7 +19,7 @@ import {
   type NodeChange, type Viewport,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
-import type { RootSlotStandardProps, SessionListState, WorkspaceListState } from './dsh.ts'
+import type { RootSlotStandardProps, SessionListState, SessionStatusSnapshot, WorkspaceListState } from './dsh.ts'
 import type { Card, FrameGeometry } from '../shared/model.ts'
 import { canvas, INBOX_BOARD_ID, newCardId, type CanvasState } from './canvas-store.ts'
 import { COLOR_TAGS } from './colors.ts'
@@ -33,6 +33,7 @@ import { WsFrameNode, type WsFrameNodeType } from './WsFrame.tsx'
 import { activeLocale, subscribeLocale, t } from './i18n.ts'
 import { talkMapApi, type ApiError } from './api.ts'
 import { useDsDarkTheme } from './use-dark.ts'
+import { randomUUID } from './uuid.ts'
 import styles from './talk-map.module.css'
 
 const nodeTypes = { sessionCard: SessionCardNode, wsFrame: WsFrameNode, draftCard: DraftCardNode }
@@ -113,11 +114,24 @@ interface MenuContext {
   view: 'root' | 'import-ws' | 'import-session' | 'new-ws'
 }
 
+/**
+ * Stand-in for `useSessionStatus` on a shell that does not deliver it: the
+ * badges read an always-empty map, so they stay hidden instead of throwing.
+ */
+const EMPTY_SESSION_STATUS: SessionStatusSnapshot = new Map()
+const NO_SESSION_STATUS_HOOK: NonNullable<RootSlotStandardProps['useSessionStatus']> =
+  selector => selector(EMPTY_SESSION_STATUS)
+
 function CanvasInner(props: RootSlotStandardProps): React.JSX.Element {
   const dark = useDsDarkTheme()
   const canvasState = useSyncExternalStore(canvas.subscribe, canvas.get)
   const sessions = props.useSessions(state => state)
   const workspaces = props.useWorkspaces(state => state)
+  // Per-Session UI status (running / waiting-on-user / done-unread). The
+  // fallback keeps the board rendering on a shell that does not deliver the
+  // hook — the two badges then simply stay hidden.
+  const useSessionStatus = props.useSessionStatus ?? NO_SESSION_STATUS_HOOK
+  const sessionStatus = useSessionStatus(state => state)
   const { screenToFlowPosition, zoomTo } = useReactFlow()
   const [selectedIds, setSelectedIds] = useState<ReadonlySet<string>>(new Set())
   const [selectedEdgeIds, setSelectedEdgeIds] = useState<ReadonlySet<string>>(new Set())
@@ -151,7 +165,8 @@ function CanvasInner(props: RootSlotStandardProps): React.JSX.Element {
     () => new Map(workspaces.items.map(item => [item.workspaceId, item.title])),
     [workspaces],
   )
-  const workspacesReady = workspaces.baselinesReady !== false
+  // 0.2.1-rc.5 replaced the `baselinesReady` boolean with an arrival phase.
+  const workspacesReady = workspaces.phase !== 'pending'
 
   const wsFrames = canvasState.global?.wsFrames ?? {}
   const layoutVersion = canvasState.global?.layoutVersion ?? 1
@@ -369,8 +384,8 @@ function CanvasInner(props: RootSlotStandardProps): React.JSX.Element {
           updatedAt: summary?.updatedAt,
           nextStep: digest?.nextStep ?? digest?.todoNext,
           summary: digest?.summary,
-          waiting: summary?.pendingInteraction !== undefined,
-          done: summary?.completed === true,
+          waiting: sessionStatus.get(card.sessionId)?.pendingInteraction !== undefined,
+          done: sessionStatus.get(card.sessionId)?.completionUnread === true,
           ...(card.colorTag !== undefined ? { colorTag: card.colorTag } : {}),
         }
         return {
@@ -401,7 +416,7 @@ function CanvasInner(props: RootSlotStandardProps): React.JSX.Element {
           },
         }]
     return [...frameNodes, ...cardNodes, ...draftNodes]
-  }, [frameGeometry, membersByGroup, wsTitles, visibleCards, canvasState.digests, canvasState.global, sessions, liveSelectedIds, draft, workspaces.items, locale])
+  }, [frameGeometry, membersByGroup, wsTitles, visibleCards, canvasState.digests, canvasState.global, sessions, sessionStatus, liveSelectedIds, draft, workspaces.items, locale])
 
   const sessionIdToCardId = useMemo(() => {
     const index = new Map<string, string>()
@@ -641,7 +656,7 @@ function CanvasInner(props: RootSlotStandardProps): React.JSX.Element {
     const geometry = sideHandles(fromCard, toCard)
     const fromTitle = sessions.byId[fromCard.sessionId]?.displayTitle
     canvas.addEdges({
-      [`edge-${crypto.randomUUID()}`]: {
+      [`edge-${randomUUID()}`]: {
         boardId: INBOX_BOARD_ID,
         fromCardId,
         toCardId,
@@ -741,7 +756,7 @@ function CanvasInner(props: RootSlotStandardProps): React.JSX.Element {
     const services = getServices()
     if (services === undefined) return
     mapUi.setOpen(false)
-    services.sessions.open(sessionId)
+    services.uiWorkspace.openSession(sessionId)
   }
 
   const groupAtPoint = (x: number, y: number): string | undefined => {
@@ -919,11 +934,10 @@ function CanvasInner(props: RootSlotStandardProps): React.JSX.Element {
             if (services === undefined || parentDir === '') throw new Error('no workspace root available')
             const path = `${parentDir}/${value}`
             await talkMapApi.ensureDir(path)
-            const response = await services.connection.api.workspace.create({ path })
-            if (!response.result.ok) {
-              throw new Error(`workspace.create: ${response.result.error.message ?? response.result.error.code ?? ''}`)
-            }
-            importWorkspace(response.result.value.workspace.workspaceId, menu.flowX, menu.flowY)
+            // ctx.workspaces.create resolves the WorkspaceView directly (and
+            // rejects with a structured error) — no RPC envelope to unwrap.
+            const workspace = await services.workspaces.create({ path })
+            importWorkspace(workspace.workspaceId, menu.flowX, menu.flowY)
             close()
           },
         },
